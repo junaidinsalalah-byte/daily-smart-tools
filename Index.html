@@ -1,0 +1,368 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>10-in-1 Smart Suite Dashboard</title>
+    <style>
+        :root {
+            --bg: #090d16;
+            --sidebar-bg: #111622;
+            --panel: #171e2e;
+            --accent: #2563eb;
+            --accent-hover: #3b82f6;
+            --text: #f3f4f6;
+            --muted: #9ca3af;
+            --border: #242f47;
+            --success: #10b981;
+        }
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: system-ui, -apple-system, sans-serif; }
+        body { background: var(--bg); color: var(--text); display: flex; height: 100vh; overflow: hidden; }
+        
+        /* Layout Configurations */
+        .sidebar { width: 280px; background: var(--sidebar-bg); border-right: 1px solid var(--border); padding: 20px; display: flex; flex-direction: column; gap: 4px; overflow-y: auto; }
+        .logo { font-size: 1.15rem; font-weight: 700; color: #fff; padding: 10px; margin-bottom: 15px; border-bottom: 1px solid var(--border); letter-spacing: 0.5px; }
+        .main-panel { flex: 1; padding: 30px; overflow-y: auto; display: flex; flex-direction: column; align-items: center; justify-content: center; }
+        
+        /* Navigation Elements */
+        .nav-btn { background: none; border: none; color: var(--muted); padding: 10px 14px; text-align: left; font-size: 0.9rem; font-weight: 600; cursor: pointer; border-radius: 6px; transition: 0.2s; display: flex; align-items: center; gap: 10px; }
+        .nav-btn:hover, .nav-btn.active { background: var(--panel); color: #fff; }
+        .nav-btn.active { border-left: 4px solid var(--accent); border-radius: 0 6px 6px 0; }
+
+        /* Tools Display Windows */
+        .tool-window { max-width: 650px; width: 100%; background: var(--panel); border: 1px solid var(--border); border-radius: 12px; padding: 25px; box-shadow: 0 10px 30px rgba(0,0,0,0.4); display: none; }
+        .tool-window.active { display: block; }
+        
+        h2 { margin-bottom: 4px; font-size: 1.35rem; color: #fff; }
+        .desc { font-size: 0.85rem; color: var(--muted); margin-bottom: 20px; }
+        
+        .input-row { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 15px; }
+        .input-group { margin-bottom: 15px; display: flex; flex-direction: column; gap: 6px; }
+        label { font-size: 0.75rem; font-weight: 700; text-transform: uppercase; color: var(--muted); letter-spacing: 0.5px; }
+        
+        input, select, textarea { width: 100%; background: var(--bg); border: 1px solid var(--border); padding: 10px; border-radius: 6px; color: white; font-size: 0.95rem; outline: none; transition: 0.2s; }
+        input:focus, select:focus { border-color: var(--accent); }
+        
+        .checkbox-group { display: flex; flex-wrap: wrap; gap: 15px; margin-bottom: 15px; }
+        .checkbox-item { display: flex; align-items: center; gap: 6px; font-size: 0.85rem; }
+        .checkbox-item input { width: auto; cursor: pointer; }
+
+        .result-display { background: var(--bg); padding: 15px; border-radius: 6px; border-left: 4px solid var(--accent); font-size: 1.1rem; font-weight: 600; margin-top: 15px; color: #fff; display: flex; justify-content: space-between; align-items: center; min-height: 54px; }
+        .copy-link { color: var(--accent); text-decoration: none; font-size: 0.8rem; font-weight: 700; cursor: pointer; }
+    </style>
+</head>
+<body>
+
+    <div class="sidebar">
+        <div class="logo">⚡ MegaUtils 10-in-1 Suite</div>
+        <button class="nav-btn active" onclick="switchTool('unit')">📏 1. Unit Converter</button>
+        <button class="nav-btn" onclick="switchTool('finance')">💵 2. Tax & Discount</button>
+        <button class="nav-btn" onclick="switchTool('counter')">✍️ 3. Word Counter</button>
+        <button class="nav-btn" onclick="switchTool('age')">📅 4. Age Calculator</button>
+        <button class="nav-btn" onclick="switchTool('password')">🔑 5. Password Generator</button>
+        <button class="nav-btn" onclick="switchTool('emi')">🏦 6. Loan EMI Calc</button>
+        <button class="nav-btn" onclick="switchTool('percent')">📊 7. Percent Finder</button>
+        <button class="nav-btn" onclick="switchTool('health')">❤️ 8. BMR Fitness Calc</button>
+        <button class="nav-btn" onclick="switchTool('picker')">🎲 9. Decision Picker</button>
+        <button class="nav-btn" onclick="switchTool('binary')">💻 10. Binary Encoder</button>
+    </div>
+
+    <div class="main-panel">
+
+        <div id="unit" class="tool-window active">
+            <h2>Universal Unit Converter</h2>
+            <p class="desc">Instantly translate weights and common length metric vectors.</p>
+            <div class="input-group">
+                <label>Value to Convert</label>
+                <input type="number" id="unitValue" value="1" oninput="convertUnits()">
+            </div>
+            <div class="input-row">
+                <div class="input-group">
+                    <label>From</label>
+                    <select id="unitFrom" onchange="convertUnits()">
+                        <option value="kg">Kilograms (kg)</option>
+                        <option value="lbs">Pounds (lbs)</option>
+                        <option value="km">Kilometers (km)</option>
+                        <option value="miles">Miles</option>
+                    </select>
+                </div>
+                <div class="input-group">
+                    <label>To</label>
+                    <select id="unitTo" onchange="convertUnits()">
+                        <option value="lbs">Pounds (lbs)</option>
+                        <option value="kg">Kilograms (kg)</option>
+                        <option value="miles">Miles</option>
+                        <option value="km">Kilometers (km)</option>
+                    </select>
+                </div>
+            </div>
+            <div class="result-display" id="unitResult">Result Metrics Loading...</div>
+        </div>
+
+        <div id="finance" class="tool-window">
+            <h2>Discount & Bill Splitter</h2>
+            <p class="desc">Track markdowns, sales adjustments, and cost splits.</p>
+            <div class="input-row">
+                <div class="input-group">
+                    <label>Base Price / Amount ($)</label>
+                    <input type="number" id="billAmount" value="100" oninput="calculateFinance()">
+                </div>
+                <div class="input-group">
+                    <label>Percentage Rate (%)</label>
+                    <input type="number" id="taxPercentage" value="15" oninput="calculateFinance()">
+                </div>
+            </div>
+            <div class="result-display" id="financeResult">Calculation Stream Loading...</div>
+        </div>
+
+        <div id="counter" class="tool-window">
+            <h2>Word & Character Analytics</h2>
+            <p class="desc">Real-time validation framework for strings, essays, or code text arrays.</p>
+            <div class="input-group">
+                <label>Text Entry Terminal</label>
+                <textarea id="textData" style="height: 120px;" placeholder="Paste text content structures directly here..." oninput="countText()"></textarea>
+            </div>
+            <div class="result-display" id="counterResult">Words: 0 | Characters: 0</div>
+        </div>
+
+        <div id="age" class="tool-window">
+            <h2>Age & Milestone Counter</h2>
+            <p class="desc">Calculate exact durations, intervals, and age spans instantly.</p>
+            <div class="input-row">
+                <div class="input-group">
+                    <label>Start / Birth Date</label>
+                    <input type="date" id="startDate" onchange="calculateAge()">
+                </div>
+                <div class="input-group">
+                    <label>Target End Date</label>
+                    <input type="date" id="endDate" onchange="calculateAge()">
+                </div>
+            </div>
+            <div class="result-display" id="ageResult">Select relevant date fields...</div>
+        </div>
+
+        <div id="password" class="tool-window">
+            <h2>Cryptographic Key Generator</h2>
+            <p class="desc">Create custom secure passwords instantly.</p>
+            <div class="input-group">
+                <label>Key Length Constraints</label>
+                <input type="number" id="passLength" value="16" min="6" max="40" oninput="generatePassword()">
+            </div>
+            <div class="checkbox-group">
+                <div class="checkbox-item"><input type="checkbox" id="pCaps" checked onchange="generatePassword()"> Capitals</div>
+                <div class="checkbox-item"><input type="checkbox" id="pNum" checked onchange="generatePassword()"> Numbers</div>
+                <div class="checkbox-item"><input type="checkbox" id="pSym" checked onchange="generatePassword()"> Symbols</div>
+            </div>
+            <div class="result-display">
+                <span id="passwordResult" style="font-family: monospace;">Processing String...</span>
+                <span class="copy-link" onclick="copyText('passwordResult')">Copy</span>
+            </div>
+        </div>
+
+        <div id="emi" class="tool-window">
+            <h2>Loan EMI Calculator</h2>
+            <p class="desc">Calculate principal assets, financial structures, and interest margins.</p>
+            <div class="input-group">
+                <label>Principal Principal Loan Balance ($)</label>
+                <input type="number" id="emiPrincipal" value="5000" oninput="calculateEMI()">
+            </div>
+            <div class="input-row">
+                <div class="input-group">
+                    <label>Interest Rate (% Annual)</label>
+                    <input type="number" id="emiRate" value="8" step="0.1" oninput="calculateEMI()">
+                </div>
+                <div class="input-group">
+                    <label>Tenure Length (Months)</label>
+                    <input type="number" id="emiMonths" value="12" oninput="calculateEMI()">
+                </div>
+            </div>
+            <div class="result-display" id="emiResult">Awaiting system input metrics...</div>
+        </div>
+
+        <div id="percent" class="tool-window">
+            <h2>Value Percentage Finder</h2>
+            <p class="desc">Instantly compute baseline metrics, markup values, or fractional ratios.</p>
+            <div class="input-row">
+                <div class="input-group">
+                    <label>Find What Percentage (%)</label>
+                    <input type="number" id="pctNum" value="20" oninput="calculatePercent()">
+                </div>
+                <div class="input-group">
+                    <label>Of Total Amount Value ($)</label>
+                    <input type="number" id="pctTotal" value="250" oninput="calculatePercent()">
+                </div>
+            </div>
+            <div class="result-display" id="percentResult">Awaiting inputs...</div>
+        </div>
+
+        <div id="health" class="tool-window">
+            <h2>BMR Fitness Metabolism Tracker</h2>
+            <p class="desc">Determine baseline metabolic efficiency configurations using standard data metrics.</p>
+            <div class="input-row">
+                <div class="input-group">
+                    <label>Weight (kg)</label>
+                    <input type="number" id="hWeight" value="70" oninput="calculateBMR()">
+                </div>
+                <div class="input-group">
+                    <label>Height (cm)</label>
+                    <input type="number" id="hHeight" value="175" oninput="calculateBMR()">
+                </div>
+            </div>
+            <div class="input-row">
+                <div class="input-group">
+                    <label>Age Span (Years)</label>
+                    <input type="number" id="hAge" value="25" oninput="calculateBMR()">
+                </div>
+                <div class="input-group">
+                    <label>Biological Gender Profile</label>
+                    <select id="hGender" onchange="calculateBMR()">
+                        <option value="male">Male</option>
+                        <option value="female">Female</option>
+                    </select>
+                </div>
+            </div>
+            <div class="result-display" id="healthResult">Calculated baseline index metrics display here...</div>
+        </div>
+
+        <div id="picker" class="tool-window">
+            <h2>Random Decision Choice Picker</h2>
+            <p class="desc">Stuck making a choice? Input items split by commas to let chance extract the ideal route.</p>
+            <div class="input-group">
+                <label>Options Pool Array (Comma Separated)</label>
+                <input type="text" id="pickerInput" value="Option A, Option B, Option C, Option D">
+            </div>
+            <button class="action-btn" onclick="pickRandomChoice()" style="margin-bottom: 15px;">Extract Randomized Variable</button>
+            <div class="result-display" id="pickerResult">Awaiting extraction triggers...</div>
+        </div>
+
+        <div id="binary" class="tool-window">
+            <h2>Binary Translation Utility</h2>
+            <p class="desc">Instantly convert standard textual strings into raw binary machine arrays.</p>
+            <div class="input-group">
+                <label>Standard Human String Text</label>
+                <input type="text" id="binaryInput" value="Hello" oninput="encodeBinary()">
+            </div>
+            <div class="result-display">
+                <span id="binaryResult" style="font-family: monospace; font-size: 0.9rem; overflow-x: auto; white-space: nowrap; max-width: 80%;">01001000 01100101...</span>
+                <span class="copy-link" onclick="copyText('binaryResult')">Copy</span>
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        function switchTool(id) {
+            document.querySelectorAll('.tool-window').forEach(el => el.classList.remove('active'));
+            document.querySelectorAll('.nav-btn').forEach(el => el.classList.remove('active'));
+            document.getElementById(id).classList.add('active');
+            event.currentTarget.classList.add('active');
+
+            if(id === 'age' && !document.getElementById('startDate').value) {
+                const now = new Date().toISOString().split('T')[0];
+                document.getElementById('startDate').value = now;
+                document.getElementById('endDate').value = now;
+            }
+            if(id === 'password') generatePassword();
+        }
+
+        function convertUnits() {
+            const val = parseFloat(document.getElementById('unitValue').value) || 0;
+            const from = document.getElementById('unitFrom').value;
+            const to = document.getElementById('unitTo').value;
+            let res = 0;
+            if (from === to) res = val;
+            else if (from === 'kg' && to === 'lbs') res = val * 2.20462;
+            else if (from === 'lbs' && to === 'kg') res = val / 2.20462;
+            else if (from === 'km' && to === 'miles') res = val * 0.621371;
+            else if (from === 'miles' && to === 'km') res = val / 0.621371;
+            document.getElementById('unitResult').textContent = `Conversion Output: ${res.toFixed(2)} ${to}`;
+        }
+
+        function calculateFinance() {
+            const bill = parseFloat(document.getElementById('billAmount').value) || 0;
+            const pct = parseFloat(document.getElementById('taxPercentage').value) || 0;
+            const target = bill * (pct / 100);
+            document.getElementById('financeResult').textContent = `Discount Output: $${(bill - target).toFixed(2)} | With Tax Added: $${(bill + target).toFixed(2)}`;
+        }
+
+        function countText() {
+            const t = document.getElementById('textData').value.trim();
+            document.getElementById('counterResult').textContent = `Words: ${t === "" ? 0 : t.split(/\s+/).length} | Characters: ${t.length}`;
+        }
+
+        function calculateAge() {
+            const d1 = new Date(document.getElementById('startDate').value);
+            const d2 = new Date(document.getElementById('endDate').value);
+            if(isNaN(d1) || isNaN(d2)) return;
+            const totalDays = Math.ceil(Math.abs(d2 - d1) / (1000 * 60 * 60 * 24));
+            document.getElementById('ageResult').textContent = `Exact Duration Span: ${totalDays} Days`;
+        }
+
+        function generatePassword() {
+            const len = parseInt(document.getElementById('passLength').value) || 12;
+            let pool = "abcdefghijklmnopqrstuvwxyz";
+            if (document.getElementById('pCaps').checked) pool += "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+            if (document.getElementById('pNum').checked) pool += "0123456789";
+            if (document.getElementById('pSym').checked) pool += "!@#$%^&*()_+=-";
+            let pass = "";
+            for (let i = 0; i < len; i++) pass += pool.charAt(Math.floor(Math.random() * pool.length));
+            document.getElementById('passwordResult').textContent = pass;
+        }
+
+        function calculateEMI() {
+            const p = parseFloat(document.getElementById('emiPrincipal').value) || 0;
+            const r = ((parseFloat(document.getElementById('emiRate').value) || 0) / 12) / 100;
+            const n = parseInt(document.getElementById('emiMonths').value) || 0;
+            if(p <= 0 || r <= 0 || n <= 0) { document.getElementById('emiResult').textContent = "Awaiting parameters..."; return; }
+            const emi = (p * r * Math.pow(1 + r, n)) / (Math.pow(1 + r, n) - 1);
+            document.getElementById('emiResult').textContent = `Calculated EMI Charge: $${emi.toFixed(2)} / Month`;
+        }
+
+        function calculatePercent() {
+            const n = parseFloat(document.getElementById('pctNum').value) || 0;
+            const tot = parseFloat(document.getElementById('pctTotal').value) || 0;
+            document.getElementById('percentResult').textContent = `Result Value: $${((n / 100) * tot).toFixed(2)}`;
+        }
+
+        function calculateBMR() {
+            const w = parseFloat(document.getElementById('hWeight').value) || 0;
+            const h = parseFloat(document.getElementById('hHeight').value) || 0;
+            const a = parseFloat(document.getElementById('hAge').value) || 0;
+            const g = document.getElementById('hGender').value;
+            let bmr = (g === 'male') ? (10 * w) + (6.25 * h) - (5 * a) + 5 : (10 * w) + (6.25 * h) - (5 * a) - 161;
+            document.getElementById('healthResult').textContent = `Baseline Resting BMR Efficiency: ${bmr.toFixed(0)} Calories / Day`;
+        }
+
+        function pickRandomChoice() {
+            const arr = document.getElementById('pickerInput').value.split(',').map(x => x.trim()).filter(x => x !== "");
+            if(arr.length === 0) return;
+            const win = arr[Math.floor(Math.random() * arr.length)];
+            document.getElementById('pickerResult').textContent = `Selected System Variant: ${win}`;
+        }
+
+        function encodeBinary() {
+            const str = document.getElementById('binaryInput').value;
+            let out = "";
+            for (let i = 0; i < str.length; i++) {
+                let bin = str[i].charCodeAt(0).toString(2);
+                out += "0".repeat(8 - bin.length) + bin + " ";
+            }
+            document.getElementById('binaryResult').textContent = out.trim() || "00000000";
+        }
+
+        function copyText(elementId) {
+            navigator.clipboard.writeText(document.getElementById(elementId).textContent);
+            alert("Content string synchronized to local system clipboard safely.");
+        }
+
+        // Initialize parameters seamlessly across components on payload initialization
+        window.onload = function() {
+            convertUnits();
+            calculateFinance();
+            calculatePercent();
+            calculateBMR();
+            encodeBinary();
+        }
+    </script>
+</body>
+</html>
